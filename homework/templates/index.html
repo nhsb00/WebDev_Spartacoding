@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>SpartaCodingClub | Homework 1</title>
+
+    <meta property="og:title" content="Soobomb's" />
+    <meta property="og:description" content="ASUS ROG Swift 360Hz PG259QN / PG259QNR" />
+    <meta property="og:image" content="{{ url_for('static', filename='ogimage.jpg') }}" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'East Sea Dokdo', cursive;
+        }
+
+        .wrap {
+            width: 600px;
+            margin: auto;
+        }
+
+        img {
+            width: 600px;
+            height: 100%;
+        }
+
+        h1 {
+            font-size: 60px;
+        }
+
+        .price {
+            font-size: 24px;
+        }
+
+        .description {
+            font-size: 22px;
+        }
+
+        .order-btn {
+            margin: auto auto 20px auto;
+            display: block;
+        }
+
+        .dollor {
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            money();
+            listing();
+        });
+
+        // 로딩 후 호출
+        function listing() {
+            $.ajax({
+                type: "GET",
+                url: "/order",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        let orders = response['orders'];
+                        for (let i = 0; i < orders.length; i++) {
+                            let name = orders[i]['name'];
+                            let count = orders[i]['count'];
+                            let address = orders[i]['address'];
+                            let phone = orders[i]['phone'];
+                            let temp_html = `<tr>
+                                                <th scope="row">${name}</th>
+                                                <td>${count}</td>
+                                                <td>${address}</td>
+                                                <td>${phone}</td>
+                                            </tr>`
+                            $('#orders-box').append(temp_html)
+                        }
+                    }
+                }
+            })
+        }
+
+        function money() {
+            $.ajax({
+                type: "GET",
+                url: "https://api.manana.kr/exchange/rate.json",
+                data: {},
+                success: function (response) {
+                    let rates = response[1]['rate'];
+                    $('#money').text(rates);
+                }
+            })
+        }
+
+        function order() {
+            let name = $('#order-name').val();
+            let count = $('#order-count').val();
+            let address = $('#order-address').val();
+            let phone = $('#order-phone').val();
+            $.ajax({
+                type: "POST",
+                url: "/order",
+                data: {name_give: name,
+                    count_give: count,
+                    address_give: address,
+                    phone_give: phone},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <img
+            src="https://www.wepc.com/wp-content/uploads/2020/09/ASUS-ROG-Swift-360Hz-PG259QN-PG259QNR-1200x675.jpg"/>
+    <h1> ASUS ROG Swift 360Hz PG259QN / PG259QNR <span class="price">Price: $499.99</span></h1>
+    <p class="description">THE WORLD’S FASTEST ESPORTS DISPLAYS
+        NVIDIA® G-SYNC® displays deliver unparalleled 360 Hz gameplay, making them the choice for esports enthusiasts
+        everywhere. Experience the lowest system latency for faster reaction times, practically no ghosting, and the
+        smoothest
+        motion to help stay on target. Add in zero tearing with G-SYNC, and it’s clear why these displays are designed
+        to win.</p>
+    <p class="dollor">USD - KRW : <span id="money"></span></p>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Full Name</span>
+        </div>
+        <input id="order-name" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Quantity</label>
+        </div>
+        <select class="custom-select" id="order-count">
+            <option selected>--Quantity--</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Shipping Address</span>
+        </div>
+        <input id="order-address" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Phone Number</span>
+        </div>
+        <input id="order-phone" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div>
+        <button type="button" onclick="order()" class="btn btn-primary order-btn">Order</button>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">이름</th>
+            <th scope="col">수량</th>
+            <th scope="col">주소</th>
+            <th scope="col">전화번호</th>
+        </tr>
+        </thead>
+        <tbody id="orders-box">
+        </tbody>
+    </table>
+
+</div>
+</body>
+
+</html>

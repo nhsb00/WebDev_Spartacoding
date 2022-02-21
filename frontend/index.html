@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>SpartaCodingClub | Practice Bootstrap</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Dongle', sans-serif;
+        }
+        .wrap {
+            width: 900px;
+            margin: auto;
+        }
+        .comment  {
+            color: blue;
+            font-weight: bold;
+        }
+        .posting-box{
+            width: 500px;
+            margin: 0px auto 30px auto;
+            border: solid 3px black;
+            border-radius: 10px;
+            padding: 30px;
+
+            display: none;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#cards-box').empty();
+            listing();
+        });
+
+        function listing() {
+            $.ajax({
+                type: "GET",
+                url: "http://spartacodingclub.shop/post",
+                data: {},
+                success: function (response) {
+                    console.log(response)
+                    let rows = response['articles']
+                    for (let i = 0; i <rows.length; i++) {
+                        let comment = rows[i]['comment']
+                        let desc = rows[i]['desc']
+                        let image = rows[i]['image']
+                        let title = rows[i]['title']
+                        let url = rows[i]['url']
+
+                        console.log(comment, desc,image,title,url)
+                        
+                        let temp_html = `<div class="card">
+                                            <img class="card-img-top" src="${image}" alt="Card image cap">
+                                            <div class="card-body">
+                                                <a href="${url}" class="card-title">${title}</a>
+                                                <p class="card-text">${desc}</p>
+                                                <p class="comment">${comment}</p>
+                                            </div>
+                                        </div>`
+                        
+                        $('#cards-box').append(temp_html);
+                    }
+                }
+            })
+
+        }
+
+        //     let count = 1;
+        // function hey() {
+        //     if (count % 2 == 0){
+        //         alert(count)
+        //     } else {
+        //         alert(count)
+        //     }
+        //     count += 1;
+        // }
+        function openclose() {
+            let status = $('#post-box').css('display');
+            if (status == 'block') {
+                $('#post-box').hide();
+                $('#btn-posting-box').text('Open Posting Box');
+            } else {
+                $('#post-box').show();
+                $('#btn-posting-box').text('Close Posting Box');
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="jumbotron">
+            <h1 class="display-4">Soobin's Memo for Links</h1>
+            <p class="lead">Save Links and check later.</p>
+            <hr class="my-4">
+            <p class="lead">
+                <a onclick="openclose()" id="btn-posting-box" class="btn btn-primary btn-lg" href="#" role="button">Open Posting Box</a>
+            </p>
+        </div> 
+
+        <div class="posting-box" id="post-box">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Article URL</label>
+                <input type="email" class="form-control" id="article-url" aria-describedby="emailHelp"
+                    placeholder="URL">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Comment</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        
+        <div class="card-columns" id="cards-box">
+            <div class="card">
+                <img class="card-img-top" src="https://a.cdn-hotels.com/gdcs/production40/d811/5e89ad90-8f10-11e8-b6b0-0242ac110007.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <a href="naver.com" class="card-title">Title</a>
+                    <p class="card-text">Description about Link</p>
+                    <p class="comment">Put comments</p>
+                </div>
+            </div>
+            <div class="card">
+                <img class="card-img-top"
+                    src="https://a.cdn-hotels.com/gdcs/production40/d811/5e89ad90-8f10-11e8-b6b0-0242ac110007.jpg"
+                    alt="Card image cap">
+                <div class="card-body">
+                    <a href="naver.com" class="card-title">Title</a>
+                    <p class="card-text">Description about Link</p>
+                    <p class="comment">Put comments</p>
+                </div>
+            </div>
+            <div class="card">
+                <img class="card-img-top"
+                    src="https://a.cdn-hotels.com/gdcs/production40/d811/5e89ad90-8f10-11e8-b6b0-0242ac110007.jpg"
+                    alt="Card image cap">
+                <div class="card-body">
+                    <a href="naver.com" class="card-title">Title</a>
+                    <p class="card-text">Description about Link</p>
+                    <p class="comment">Put comments</p>
+                </div>
+            </div>
+            <div class="card">
+                <img class="card-img-top"
+                    src="https://a.cdn-hotels.com/gdcs/production40/d811/5e89ad90-8f10-11e8-b6b0-0242ac110007.jpg"
+                    alt="Card image cap">
+                <div class="card-body">
+                    <a href="naver.com" class="card-title">Title</a>
+                    <p class="card-text">Description about Link</p>
+                    <p class="comment">Put comments</p>
+                </div>
+            </div>
+            <div class="card">
+                <img class="card-img-top"
+                    src="https://a.cdn-hotels.com/gdcs/production40/d811/5e89ad90-8f10-11e8-b6b0-0242ac110007.jpg"
+                    alt="Card image cap">
+                <div class="card-body">
+                    <a href="naver.com" class="card-title">Title</a>
+                    <p class="card-text">Description about Link</p>
+                    <p class="comment">Put comments</p>
+                </div>
+            </div>
+            <div class="card">
+                <img class="card-img-top"
+                    src="https://a.cdn-hotels.com/gdcs/production40/d811/5e89ad90-8f10-11e8-b6b0-0242ac110007.jpg"
+                    alt="Card image cap">
+                <div class="card-body">
+                    <a href="naver.com" class="card-title">Title</a>
+                    <p class="card-text">Description about Link</p>
+                    <p class="comment">Put comments</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+
+</html>
